@@ -19,15 +19,97 @@
   const c = document.createElement('canvas');
   c.width = 512; c.height = 512;
   const ctx = c.getContext('2d');
-  const g = ctx.createLinearGradient(0,0,512,512);
-  g.addColorStop(0,'#e8a0b4'); g.addColorStop(1,'#b85c7a');
+
+  // Fond dégradé rose/violet
+  const g = ctx.createLinearGradient(0, 0, 512, 512);
+  g.addColorStop(0, '#f0c0d0');
+  g.addColorStop(0.5, '#d4789a');
+  g.addColorStop(1, '#9b5c8a');
   ctx.fillStyle = g;
   ctx.beginPath();
-  ctx.roundRect(0,0,512,512,80);
+  ctx.roundRect(0, 0, 512, 512, 110);
   ctx.fill();
-  ctx.font = '280px serif';
-  ctx.textAlign='center'; ctx.textBaseline='middle';
-  ctx.fillText('💍',256,256);
+
+  // Cercle central décoratif semi-transparent
+  ctx.beginPath();
+  ctx.arc(256, 220, 148, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.fill();
+
+  // Alliances entrelacées dessinées
+  function drawRing(cx, cy, r, color, lineW) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineW;
+    ctx.stroke();
+  }
+  const ringY = 210;
+  const ringR = 72;
+  const overlap = 38;
+  // Ombre anneaux
+  ctx.shadowColor = 'rgba(0,0,0,0.25)';
+  ctx.shadowBlur = 14;
+  // Anneau gauche (violet clair) - arc arrière
+  ctx.beginPath();
+  ctx.arc(256 - overlap, ringY, ringR, 0.52, Math.PI * 2 - 0.52);
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 28;
+  ctx.stroke();
+  // Anneau droit (rose clair) - arc arrière
+  ctx.beginPath();
+  ctx.arc(256 + overlap, ringY, ringR, Math.PI + 0.52, Math.PI - 0.52, true);
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+  ctx.lineWidth = 28;
+  ctx.stroke();
+  // Anneau gauche avant
+  ctx.beginPath();
+  ctx.arc(256 - overlap, ringY, ringR, Math.PI * 2 - 0.52, 0.52 + Math.PI * 2, false);
+  ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+  ctx.lineWidth = 28;
+  ctx.stroke();
+  // Anneau droit avant
+  ctx.beginPath();
+  ctx.arc(256 + overlap, ringY, ringR, Math.PI - 0.52, Math.PI + 0.52, false);
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.lineWidth = 28;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Cœur sous les alliances
+  function heart(cx, cy, size) {
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + size * 0.3);
+    ctx.bezierCurveTo(cx, cy, cx - size, cy, cx - size, cy - size * 0.5);
+    ctx.bezierCurveTo(cx - size, cy - size * 1.1, cx, cy - size * 1.1, cx, cy - size * 0.5);
+    ctx.bezierCurveTo(cx, cy - size * 1.1, cx + size, cy - size * 1.1, cx + size, cy - size * 0.5);
+    ctx.bezierCurveTo(cx + size, cy, cx, cy, cx, cy + size * 0.3);
+    ctx.closePath();
+  }
+  ctx.shadowColor = 'rgba(180,80,120,0.4)';
+  ctx.shadowBlur = 10;
+  heart(256, 324, 26);
+  ctx.fillStyle = 'rgba(255,255,255,0.95)';
+  ctx.fill();
+  ctx.shadowBlur = 0;
+
+  // Initiales M & L
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor = 'rgba(0,0,0,0.18)';
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = 'rgba(255,255,255,0.98)';
+  ctx.font = 'bold 68px Georgia, serif';
+  ctx.fillText('M & L', 256, 418);
+  ctx.shadowBlur = 0;
+
+  // Petites étoiles décoratives
+  [[90,80],[430,100],[60,380],[450,350],[200,470],[310,475]].forEach(([x,y]) => {
+    ctx.font = '28px serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.fillText('✦', x, y);
+  });
+
   const icon = c.toDataURL('image/png');
   document.getElementById('apple-icon').href = icon;
 
