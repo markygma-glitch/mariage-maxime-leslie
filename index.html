@@ -336,6 +336,10 @@
 </head>
 <body>
 
+<div id="update-banner" style="display:none;background:#c9748f;color:white;text-align:center;padding:10px 16px;font-size:0.85rem;position:sticky;top:0;z-index:200;">
+  🔄 Nouveau logo disponible ! Supprimez l'icône de l'écran d'accueil et réajoutez-la.
+  <button onclick="document.getElementById('update-banner').style.display='none'" style="margin-left:10px;background:rgba(255,255,255,0.25);border:none;color:white;padding:3px 10px;border-radius:10px;cursor:pointer;font-size:0.82rem;">OK</button>
+</div>
 <header>
   <h1>&#10084; Organisation du Mariage</h1>
   <p id="couple-names">Mariés</p>
@@ -1337,8 +1341,27 @@ renderAll();
 setInterval(() => { if (state.couple.date) updateCountdown(new Date(state.couple.date)); }, 60000);
 
 // ===== PWA SERVICE WORKER =====
+const LOGO_VERSION = '5';
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    reg.addEventListener('updatefound', () => {
+      const newSW = reg.installing;
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+          const seen = localStorage.getItem('logo_banner_seen');
+          if (seen !== LOGO_VERSION) {
+            document.getElementById('update-banner').style.display = 'block';
+            localStorage.setItem('logo_banner_seen', LOGO_VERSION);
+          }
+        }
+      });
+    });
+  }).catch(() => {});
+  // Affiche la bannière si jamais vue pour cette version
+  if (localStorage.getItem('logo_banner_seen') !== LOGO_VERSION) {
+    document.getElementById('update-banner').style.display = 'block';
+    localStorage.setItem('logo_banner_seen', LOGO_VERSION);
+  }
 }
 
 // ===== DÉCO & THÈME =====
