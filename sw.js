@@ -1,4 +1,4 @@
-const CACHE = 'mariage-v5';
+const CACHE = 'mariage-v6';
 const FILES = ['/index.html', '/manifest.json', '/icon-512.png', '/icon-192.png'];
 
 self.addEventListener('install', e => {
