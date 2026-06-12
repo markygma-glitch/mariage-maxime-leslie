@@ -357,10 +357,10 @@
 <!-- ======= ACCUEIL ======= -->
 <div id="tab-accueil" class="tab active">
   <div class="card" style="background:linear-gradient(135deg,#fdf0f4,#fdf7e8); border-color:var(--rose);">
-    <div id="couple-edit" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-      <input type="text" id="name1" placeholder="Prénom Marié·e 1" style="flex:1;min-width:130px;" oninput="updateCouple()">
-      <span style="font-size:1.2rem;">&#10084;</span>
-      <input type="text" id="name2" placeholder="Prénom Marié·e 2" style="flex:1;min-width:130px;" oninput="updateCouple()">
+    <div style="display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;padding:8px 0;">
+      <span style="font-size:1.15rem;font-weight:600;color:var(--text);">Maxime Wolff</span>
+      <span style="font-size:1.3rem;">&#10084;</span>
+      <span style="font-size:1.15rem;font-weight:600;color:var(--text);">Leslie Vo</span>
     </div>
     <div class="countdown" id="countdown-display">
       <div class="count-unit"><div class="count-num" id="cd-days">—</div><div class="count-lbl">jours</div></div>
@@ -731,7 +731,7 @@
 <script>
 // ===== STATE =====
 let state = {
-  couple: { name1: 'Maxime Wolff', name2: 'Leslie Vo', date: '', lieu: '' },
+  couple: { name1: 'Maxime Wolff', name2: 'Leslie Vo', date: '', lieu: '', locked: true },
   guests: [],
   budget: { total: 0, items: [] },
   hotels: [],
@@ -940,11 +940,7 @@ function saveWeddingDate() {
   state.couple.lieu = document.getElementById('wedding-lieu').value;
   save(); closeModal(); renderAll();
 }
-function updateCouple() {
-  state.couple.name1 = document.getElementById('name1').value;
-  state.couple.name2 = document.getElementById('name2').value;
-  save(); renderAll();
-}
+function updateCouple() {}
 function renderCountdown() {
   const el = document.getElementById('header-date');
   if (!state.couple.date) { el.textContent = 'Définir la date du mariage'; updateCountdown(null); return; }
@@ -1321,12 +1317,10 @@ function renderAccueil() {
 // ===== RENDER ALL =====
 function renderAll() {
   renderCountdown();
-  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolff';
-  document.getElementById('name2').value = state.couple.name2 || 'Leslie Vo';
-  const n1 = state.couple.name1 || 'Maxime Wolff';
-  const n2 = state.couple.name2 || 'Leslie Vo';
-  document.getElementById('opt-marie1').textContent = 'Côté ' + n1;
-  document.getElementById('opt-marie2').textContent = 'Côté ' + n2;
+  state.couple.name1 = 'Maxime Wolff';
+  state.couple.name2 = 'Leslie Vo';
+  document.getElementById('opt-marie1').textContent = 'Côté Maxime Wolff';
+  document.getElementById('opt-marie2').textContent = 'Côté Leslie Vo';
   renderGuests();
   renderBudget();
   renderHotels();
