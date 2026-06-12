@@ -416,8 +416,8 @@
     <div class="form-row">
       <select id="g-cote">
         <option value="">Côté</option>
-        <option value="marie1">Côté Maxime</option>
-        <option value="marie2">Côté Leslie Vo</option>
+        <option value="marie1" id="opt-marie1">Côté Marié·e 1</option>
+        <option value="marie2" id="opt-marie2">Côté Marié·e 2</option>
         <option value="commun">Commun</option>
       </select>
       <select id="g-statut">
@@ -731,7 +731,7 @@
 <script>
 // ===== STATE =====
 let state = {
-  couple: { name1: 'Maxime Wolf', name2: 'Leslie Vo', date: '', lieu: '' },
+  couple: { name1: 'Maxime Wolff', name2: 'Leslie Vo', date: '', lieu: '' },
   guests: [],
   budget: { total: 0, items: [] },
   hotels: [],
@@ -1012,8 +1012,8 @@ function renderGuests() {
     tr.innerHTML = `
       <td><strong>${g.prenom} ${g.nom}</strong>${g.email ? '<br><small style="color:var(--text-light)">'+g.email+'</small>' : ''}</td>
       <td>${
-        g.cote === 'marie1' ? '<span style="background:#f0e8fd;color:#7b4fc9;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; Maxime</span>' :
-        g.cote === 'marie2' ? '<span style="background:#fde8f0;color:#c9748f;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; Leslie Vo</span>' :
+        g.cote === 'marie1' ? `<span style="background:#f0e8fd;color:#7b4fc9;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; ${state.couple.name1||'Marié·e 1'}</span>` :
+        g.cote === 'marie2' ? `<span style="background:#fde8f0;color:#c9748f;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; ${state.couple.name2||'Marié·e 2'}</span>` :
         g.cote === 'commun' ? '<span style="background:var(--green-light);color:#3d8060;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#10084; Commun</span>' : '—'
       }</td>
       <td>
@@ -1321,8 +1321,12 @@ function renderAccueil() {
 // ===== RENDER ALL =====
 function renderAll() {
   renderCountdown();
-  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolf';
+  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolff';
   document.getElementById('name2').value = state.couple.name2 || 'Leslie Vo';
+  const n1 = state.couple.name1 || 'Maxime Wolff';
+  const n2 = state.couple.name2 || 'Leslie Vo';
+  document.getElementById('opt-marie1').textContent = 'Côté ' + n1;
+  document.getElementById('opt-marie2').textContent = 'Côté ' + n2;
   renderGuests();
   renderBudget();
   renderHotels();
