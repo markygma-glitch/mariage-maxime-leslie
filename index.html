@@ -731,7 +731,7 @@
 <script>
 // ===== STATE =====
 let state = {
-  couple: { name1: 'Maxime Wolff', name2: 'Leslie Vo', date: '', lieu: '' },
+  couple: { name1: 'Maxime Wolf', name2: 'Leslie Vo', date: '', lieu: '' },
   guests: [],
   budget: { total: 0, items: [] },
   hotels: [],
@@ -1321,7 +1321,7 @@ function renderAccueil() {
 // ===== RENDER ALL =====
 function renderAll() {
   renderCountdown();
-  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolff';
+  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolf';
   document.getElementById('name2').value = state.couple.name2 || 'Leslie Vo';
   renderGuests();
   renderBudget();
