@@ -350,6 +350,7 @@
   <button onclick="showTab('hebergement', this)">&#127968; Hébergement</button>
   <button onclick="showTab('todo', this)">&#9989; To-Do</button>
   <button onclick="showTab('planning', this)">&#128337; Planning</button>
+  <button onclick="showTab('deco', this)">&#127812; Déco & Thème</button>
 </nav>
 
 <main>
@@ -674,7 +675,42 @@
   </div>
 </div>
 
+<!-- ======= DÉCO & THÈME ======= -->
+<div id="tab-deco" class="tab">
+  <div class="section-title">&#127812; Déco & Thème</div>
+
+  <!-- Favoris -->
+  <div class="card" id="favoris-card" style="display:none;">
+    <div class="card-header"><span class="card-title">&#9829; Mes favoris</span><button class="btn btn-sm" style="background:var(--rose-light);color:var(--rose-dark);" onclick="clearFavoris()">Tout effacer</button></div>
+    <div id="favoris-list" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+  </div>
+
+  <!-- Filtre catégorie -->
+  <div class="filters" id="deco-filters">
+    <button class="filter-btn active" onclick="filterDeco('all',this)">Tous</button>
+    <button class="filter-btn" onclick="filterDeco('theme',this)">Thèmes</button>
+    <button class="filter-btn" onclick="filterDeco('palette',this)">Palettes</button>
+    <button class="filter-btn" onclick="filterDeco('fleurs',this)">Fleurs</button>
+    <button class="filter-btn" onclick="filterDeco('table',this)">Tables</button>
+    <button class="filter-btn" onclick="filterDeco('ceremonie',this)">Cérémonie</button>
+    <button class="filter-btn" onclick="filterDeco('gateau',this)">Gâteaux</button>
+  </div>
+
+  <div id="deco-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+</div>
+
 </main>
+
+<!-- MODAL déco -->
+<div class="modal-overlay" id="deco-modal">
+  <div class="modal" style="max-width:520px;">
+    <div id="deco-modal-content"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="document.getElementById('deco-modal').classList.remove('open')" style="background:var(--bg);">Fermer</button>
+      <button class="btn btn-primary" id="deco-fav-btn" onclick="toggleFavoriFromModal()">&#9829; Ajouter aux favoris</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL date -->
 <div class="modal-overlay" id="date-modal">
@@ -887,7 +923,7 @@ function showTab(name, btn) {
   if (btn) btn.classList.add('active');
   else {
     const btns = document.querySelectorAll('nav button');
-    const tabs = ['accueil','invites','budget','hebergement','todo','planning'];
+    const tabs = ['accueil','invites','budget','hebergement','todo','planning','deco'];
     const idx = tabs.indexOf(name);
     if (idx >= 0) btns[idx].classList.add('active');
   }
@@ -1294,6 +1330,8 @@ function renderAll() {
   renderTodos();
   renderPlanning();
   renderAccueil();
+  renderDeco();
+  renderFavoris();
 }
 
 // ===== INIT =====
@@ -1321,6 +1359,250 @@ self.addEventListener('fetch', e => {
   }).catch(() => caches.match('./'))));
 });`;
   const blob = new Blob([swCode], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob), {scope: './'}).catch(()=>{});
+}
+
+// ===== DÉCO & THÈME =====
+const DECO_ITEMS = [
+  // THÈMES
+  { id:'t1', cat:'theme', title:'Champêtre & Rustique', emoji:'🌾', grad:'linear-gradient(135deg,#f5e6c8,#d4a96a)',
+    colors:['#d4a96a','#8b6340','#c8b89a','#7a9e7e','#f5e6c8'],
+    desc:'Ambiance naturelle, bois brut, lin, fleurs des champs. Parfait en grange ou en plein air.',
+    details:'Matériaux : bois, jute, lin\nFleurs : tournesols, lavande, bleuets, marguerites\nÉclairage : guirlandes ampoules, bougies\nDétails : caisses en bois, bocaux Mason, herbe de pampa'},
+  { id:'t2', cat:'theme', title:'Bohème & Romantique', emoji:'🌿', grad:'linear-gradient(135deg,#f0e6d3,#c49a6c)',
+    colors:['#c49a6c','#e8c9a0','#9b7b5a','#d4b896','#6b8f71'],
+    desc:'Esprit libre et naturel, macramé, plumes, verdure abondante. Cérémonie en plein air idéale.',
+    details:'Matériaux : macramé, velours, plumes\nFleurs : pivoines, eucalyptus, roses sauvages, pampas\nÉclairage : lanternes, bougies, dreamcatchers\nDétails : tapis berbère, coussins, baldaquin'},
+  { id:'t3', cat:'theme', title:'Élégance Classique', emoji:'🕊️', grad:'linear-gradient(135deg,#f8f4f0,#c9b08a)',
+    colors:['#c9b08a','#f8f4f0','#8a7060','#d4c4a8','#2c2c2c'],
+    desc:'Blanc immaculé, or, roses blanches. Raffinement intemporel pour une cérémonie majestueuse.',
+    details:'Matériaux : satin, dentelle, cristal, or\nFleurs : roses blanches, lys, pivoines blanches\nÉclairage : chandeliers, bougeoirs dorés\nDétails : nappes blanches, vaisselle dorée, calligraphie'},
+  { id:'t4', cat:'theme', title:'Vintage & Rétro', emoji:'📷', grad:'linear-gradient(135deg,#f2e8dc,#b8956a)',
+    colors:['#b8956a','#e8d5b7','#8b6b4a','#c9a87c','#f5f0e8'],
+    desc:'Années 20-50, dentelle ancienne, vieilles photos, valises vintage. Nostalgique et romantique.',
+    details:'Matériaux : dentelle ancienne, bois cérusé, papier kraft\nFleurs : roses anglaises, dahlias, clématites\nÉclairage : lampes rétro, guirlandes Edison\nDétails : vieilles valises, cadres dorés, livres anciens'},
+  { id:'t5', cat:'theme', title:'Moderne & Minimaliste', emoji:'◼', grad:'linear-gradient(135deg,#e8e8e8,#2c2c2c)',
+    colors:['#2c2c2c','#e8e8e8','#c9a84c','#f5f5f5','#888888'],
+    desc:'Lignes épurées, noir et blanc, touches dorées. Sophistication contemporaine et impactante.',
+    details:'Matériaux : marbre, verre, métal doré ou noir mat\nFleurs : callas blancs, orchidées, gypsophile\nÉclairage : néons, spots, bougies géométriques\nDétails : menus imprimés en noir & blanc, vaisselle mate'},
+  { id:'t6', cat:'theme', title:'Tropical & Exotique', emoji:'🌺', grad:'linear-gradient(135deg,#a8d5a2,#f9a84d)',
+    colors:['#f9a84d','#a8d5a2','#e85d75','#ffd166','#06d6a0'],
+    desc:'Feuilles de palmier, hibiscus, couleurs vives. Ambiance île paradisiaque et joyeuse.',
+    details:'Matériaux : rotin, bambou, tissu coloré\nFleurs : hibiscus, birds of paradise, frangipanes\nÉclairage : lampions colorés, torches\nDétails : fruits exotiques, ananas dorés, coquillages'},
+  { id:'t7', cat:'theme', title:'Féerique & Enchantée', emoji:'✨', grad:'linear-gradient(135deg,#d4b0e8,#7b4fa6)',
+    colors:['#7b4fa6','#d4b0e8','#f0c0d8','#c9e8f0','#ffd700'],
+    desc:'Lumières féeriques, fleurs suspendues, magie et poésie. Un conte de fées dans la vraie vie.',
+    details:'Matériaux : tulle, organza, cristaux, lumières LED\nFleurs : roses suspendues, glycine, jasmin\nÉclairage : milliers de petites lumières, bougies flottantes\nDétails : arche fleurie, miroirs, papillons dorés'},
+  { id:'t8', cat:'theme', title:'Méditerranéen & Provence', emoji:'🌻', grad:'linear-gradient(135deg,#f5e642,#e8834d)',
+    colors:['#e8834d','#f5e642','#6b9e4a','#c9748f','#4a7bc4'],
+    desc:'Lavande, citrons, oliviers, céramiques colorées. La douceur du Sud en plein mariage.',
+    details:'Matériaux : terre cuite, céramique peinte, lin\nFleurs : lavande, mimosa, tournesols, romarin\nÉclairage : lanternes, bougies, lumières chaudes\nDétails : citrons déco, olives, carreaux Azulejos'},
+  { id:'t9', cat:'theme', title:'Noir & Or Glamour', emoji:'💛', grad:'linear-gradient(135deg,#1a1a1a,#c9a84c)',
+    colors:['#c9a84c','#1a1a1a','#f5f0e0','#8b7340','#ffffff'],
+    desc:'Opulence et glamour, décoration somptueuse, ambiance soirée de gala inoubliable.',
+    details:'Matériaux : velours noir, or, marbre\nFleurs : roses noires, callas blancs, orchidées\nÉclairage : chandeliers dorés, lumières tamisées\nDétails : menu doré, nappes velours, miroirs'},
+  { id:'t10', cat:'theme', title:'Japandi & Nature', emoji:'🎋', grad:'linear-gradient(135deg,#e8ebe0,#8aab78)',
+    colors:['#8aab78','#e8ebe0','#c4b59a','#4a6741','#f5f2ec'],
+    desc:'Esthétique japonaise minimaliste mêlée au scandinave. Sérénité, bambou et fleurs de cerisier.',
+    details:'Matériaux : bambou, bois clair, lin naturel\nFleurs : cerisier, bonsaï, herbes de pampa\nÉclairage : papier washi, bougies zen\nDétails : origamis, galets, calligraphie japonaise'},
+
+  // PALETTES DE COULEURS
+  { id:'p1', cat:'palette', title:'Rose Poudré & Champagne', emoji:'🌸', grad:'linear-gradient(135deg,#f9d5e5,#f0c080)',
+    colors:['#f9d5e5','#e8a0b4','#f0c080','#c9a84c','#ffffff'],
+    desc:'Douceur et féminité. Alliance parfaite entre le rose pâle et les tons chauds dorés.',
+    details:'Idéal pour : robe, fleurs, nappes, menus\nAssortir avec : blanc cassé, or, vert sauge'},
+  { id:'p2', cat:'palette', title:'Terracotta & Vert Sauge', emoji:'🍂', grad:'linear-gradient(135deg,#e07a5f,#81b29a)',
+    colors:['#e07a5f','#f2cc8f','#81b29a','#3d405b','#f4f1de'],
+    desc:'Tendance et naturel. Tons chauds et verdoyants pour un mariage automnal ou champêtre.',
+    details:'Idéal pour : centres de table, tenues témoins, fleurs\nAssortir avec : lin, bois naturel, crème'},
+  { id:'p3', cat:'palette', title:'Bleu Marine & Or', emoji:'💙', grad:'linear-gradient(135deg,#1d3461,#c9a84c)',
+    colors:['#1d3461','#c9a84c','#f5f0e0','#457b9d','#ffffff'],
+    desc:'Élégance marine et prestige. Pour un mariage sophistiqué avec une touche nautique ou classique.',
+    details:'Idéal pour : invitations, costume, déco de table\nAssortir avec : blanc, argenté, ivoire'},
+  { id:'p4', cat:'palette', title:'Lilas & Eucalyptus', emoji:'💜', grad:'linear-gradient(135deg,#c9b1d9,#7fad8c)',
+    colors:['#c9b1d9','#9b72bc','#7fad8c','#d4e8d8','#f5f0f8'],
+    desc:'Poétique et naturel. Le mariage du violet doux et du vert végétal pour une ambiance botanique.',
+    details:'Idéal pour : fleurs, nappes, faire-part\nAssortir avec : blanc, bois clair, or rosé'},
+  { id:'p5', cat:'palette', title:'Corail & Menthe', emoji:'🍑', grad:'linear-gradient(135deg,#ff6b6b,#88d8b0)',
+    colors:['#ff6b6b','#feca57','#88d8b0','#48dbfb','#ffffff'],
+    desc:'Frais et joyeux. Mariage printanier ou estival avec des couleurs éclatantes et vivantes.',
+    details:'Idéal pour : déco extérieure, fleurs, tenues\nAssortir avec : blanc, vert citron, jaune'},
+  { id:'p6', cat:'palette', title:'Bordeaux & Rose Gold', emoji:'🍷', grad:'linear-gradient(135deg,#722f37,#e8a0b4)',
+    colors:['#722f37','#e8a0b4','#c9a84c','#f5e6e8','#4a1c22'],
+    desc:'Profond et romantique. Luxe et sensualité pour un mariage d\'automne ou d\'hiver inoubliable.',
+    details:'Idéal pour : fleurs, velours, bougies\nAssortir avec : or rose, crème, vert foncé'},
+
+  // FLEURS
+  { id:'f1', cat:'fleurs', title:'Pivoines & Roses', emoji:'🌹', grad:'linear-gradient(135deg,#fbb5c5,#e8768a)',
+    colors:['#fbb5c5','#e8768a','#f9d0d8','#c94f6a','#fff0f3'],
+    desc:'Les classiques indémodables du mariage. Bouquets volumineux, romantiques et très parfumés.',
+    details:'Saison : printemps-été\nCouleurs dispo : blanc, rose, rouge, corail, jaune\nAssocier avec : eucalyptus, gypsophile, feuillage'},
+  { id:'f2', cat:'fleurs', title:'Herbe de Pampa & Sauvages', emoji:'🌾', grad:'linear-gradient(135deg,#f5e6c8,#c4956a)',
+    colors:['#f5e6c8','#c4956a','#d4b896','#8b6b4a','#f0e8d8'],
+    desc:'Tendance boho très populaire. Légèreté et mouvement naturel pour une décoration moderne.',
+    details:'Saison : toute l\'année (sec)\nCouleurs dispo : beige, rose poudré, blanc\nAssocier avec : branches séchées, lagurus, eucalyptus'},
+  { id:'f3', cat:'fleurs', title:'Tournesols & Marguerites', emoji:'🌻', grad:'linear-gradient(135deg,#ffd166,#ef8c38)',
+    colors:['#ffd166','#ef8c38','#f5f0a0','#8b6b2a','#fffae0'],
+    desc:'Soleil et joie de vivre. Parfait pour un mariage champêtre en été, ambiance provençale.',
+    details:'Saison : été\nCouleurs dispo : jaune, orange, bicolore\nAssocier avec : bleuets, lavande, herbes'},
+  { id:'f4', cat:'fleurs', title:'Orchidées & Callas', emoji:'🌷', grad:'linear-gradient(135deg,#e8e8e8,#9b6fba)',
+    colors:['#9b6fba','#e8d8f0','#ffffff','#c4a0d8','#2c1a3a'],
+    desc:'Sophistication et modernité. Pour un mariage élégant et épuré, effet luxe garanti.',
+    details:'Saison : toute l\'année\nCouleurs dispo : blanc, violet, rose, bordeaux\nAssocier avec : feuillage tropical, plantes vertes'},
+  { id:'f5', cat:'fleurs', title:'Lavande & Mimosa', emoji:'💜', grad:'linear-gradient(135deg,#b8a0d4,#ffd700)',
+    colors:['#b8a0d4','#ffd700','#e8f0d0','#8a70b0','#fffae0'],
+    desc:'Parfum enivrant et couleurs ensoleillées du Sud. Idéal pour un mariage printanier.',
+    details:'Saison : printemps\nCouleurs dispo : violet, jaune vif\nAssocier avec : romarin, thym, verdure'},
+  { id:'f6', cat:'fleurs', title:'Dahlias & Anémones', emoji:'🌺', grad:'linear-gradient(135deg,#e85d75,#2c2c2c)',
+    colors:['#e85d75','#2c2c2c','#f0a0b0','#8b1a2a','#f5f5f5'],
+    desc:'Graphiques et dramatiques. Pour un mariage avec du caractère, automnal ou soirée.',
+    details:'Saison : été-automne\nCouleurs dispo : rouge, bordeaux, blanc, violet, noir\nAssocier avec : roses, verdure sombre'},
+
+  // TABLES
+  { id:'ta1', cat:'table', title:'Table Naturelle', emoji:'🪨', grad:'linear-gradient(135deg,#e8dcc8,#a08060)',
+    colors:['#a08060','#e8dcc8','#6b8060','#d4c4a0','#f5f0e8'],
+    desc:'Bois brut, ardoise, verdure. Une table qui sent la nature et l\'authenticité.',
+    details:'Chemin de table : lin ou coton brut\nVaisselle : grès, terre cuite\nVerrerie : verre soufflé\nBougies : piliers et tealights\nMenus : kraft avec ficelle'},
+  { id:'ta2', cat:'table', title:'Table Dorée & Fleurie', emoji:'✨', grad:'linear-gradient(135deg,#fdf0c0,#c9a84c)',
+    colors:['#c9a84c','#fdf0c0','#e8b878','#8a7030','#ffffff'],
+    desc:'Vaisselle dorée, fleurs abondantes, lumières chaudes. Luxe et générosité visuelle.',
+    details:'Chemin de table : organza doré\nVaisselle : dorée ou blanc & or\nVerrerie : cristal à bord doré\nBougies : chandeliers hauts\nMenus : calligraphie dorée'},
+  { id:'ta3', cat:'table', title:'Table Bohème Colorée', emoji:'🌈', grad:'linear-gradient(135deg,#f9c74f,#f3722c,#f94144)',
+    colors:['#f9c74f','#f3722c','#f94144','#43aa8b','#277da1'],
+    desc:'Mélange de couleurs vives, tapis, coussins. Convivialité et fête à l\'état pur.',
+    details:'Chemin de table : tissus mélangés colorés\nVaisselle : céramique colorée dépareillée\nVerrerie : verres colorés\nBougies : bougeoirs multicolores\nMenus : imprimés à motifs'},
+  { id:'ta4', cat:'table', title:'Table Minimaliste B&W', emoji:'◼', grad:'linear-gradient(135deg,#f5f5f5,#2c2c2c)',
+    colors:['#2c2c2c','#f5f5f5','#c9a84c','#888888','#e8e8e8'],
+    desc:'Noir, blanc et or. Design épuré et impactant pour un mariage chic et contemporain.',
+    details:'Chemin de table : marbre ou velours noir\nVaisselle : blanche mate ou noire\nVerrerie : noire ou transparente\nBougies : noires ou blanches\nMenus : noir avec typo blanche'},
+
+  // CÉRÉMONIE
+  { id:'c1', cat:'ceremonie', title:'Arche Fleurie', emoji:'🌸', grad:'linear-gradient(135deg,#fbb5c5,#a8d5a2)',
+    colors:['#fbb5c5','#a8d5a2','#f5e6c8','#e8768a','#7fad8c'],
+    desc:'L\'élément central de la cérémonie. Une arche garnie de fleurs fraîches crée un cadre magique.',
+    details:'Styles : demi-lune, carrée, organique\nFleurs : roses, pivoines, eucalyptus\nMatériaux : bois, métal, bambou\nOptions : avec rideaux, sans, minimaliste'},
+  { id:'c2', cat:'ceremonie', title:'Allée Bohème', emoji:'🕯️', grad:'linear-gradient(135deg,#f5e6c8,#c49a6c)',
+    colors:['#c49a6c','#f5e6c8','#d4b896','#8b6b4a','#7fad8c'],
+    desc:'Pétales, lanternes, verdure le long de l\'allée. Le chemin vers l\'autel devient féerique.',
+    details:'Éléments : pétales de rose, lanternes, bougies\nDélimitation : cordes en jute, piliers, plantes\nSol : tapis de coco, herbe, carrelage\nDétails : panneaux directionnels déco'},
+  { id:'c3', cat:'ceremonie', title:'Cérémonie en Plein Air', emoji:'🌳', grad:'linear-gradient(135deg,#a8d5a2,#4a8060)',
+    colors:['#a8d5a2','#4a8060','#f5e6c8','#c4956a','#e8f4e8'],
+    desc:'Sous les arbres ou face à un paysage. La nature comme décor, rien de plus beau.',
+    details:'Sièges : chaises Chiavari, ballots de paille, bancs\nOmbre : arbres, voiles tendus, parasols\nSon : sono discrète\nPrécautions : plan B pluie, insectes, soleil'},
+  { id:'c4', cat:'ceremonie', title:'Cérémonie Laïque Moderne', emoji:'📜', grad:'linear-gradient(135deg,#e8e8e8,#7b4fa6)',
+    colors:['#7b4fa6','#e8e8e8','#c9a84c','#d4b0e8','#2c2c2c'],
+    desc:'Officiant personnalisé, textes sur mesure, musique choisie. La cérémonie qui vous ressemble vraiment.',
+    details:'Éléments clés : autel décoré, micro, lutrin\nDurée : 30-60 min\nInclure : textes personnels, lectures, musique live\nDétails : programmes imprimés, pétales à lancer'},
+
+  // GÂTEAUX
+  { id:'g1', cat:'gateau', title:'Naked Cake Fleuri', emoji:'🎂', grad:'linear-gradient(135deg,#f5e6c8,#e8a0b4)',
+    colors:['#f5e6c8','#e8a0b4','#d4b896','#c9748f','#fff8f0'],
+    desc:'Gâteau nu avec fleurs fraîches. Rustique et romantique, très tendance depuis quelques années.',
+    details:'Saveurs pop : citron-framboise, vanille-fraise, chocolat-caramel\nNombres d\'étages : 3-5\nFleurs : fraîches comestibles ou non\nOptions : semi-naked, coulis, fruits'},
+  { id:'g2', cat:'gateau', title:'Wedding Cake Blanc & Or', emoji:'✨', grad:'linear-gradient(135deg,#ffffff,#c9a84c)',
+    colors:['#ffffff','#c9a84c','#f5f0e0','#8a7030','#e8e8e8'],
+    desc:'Le classique majestueux. Blanc immaculé avec détails dorés, glaçage lisse, plusieurs étages.',
+    details:'Déco : sucre tiré, fondant, dorure comestible\nNombres d\'étages : 3-7\nSaveurs : vanille, citron, fruits rouges\nOptions : pilliers, fleurs en sucre, monogramme'},
+  { id:'g3', cat:'gateau', title:'Pièce Montée Choux', emoji:'🍰', grad:'linear-gradient(135deg,#f5e6c8,#c4956a)',
+    colors:['#f5e6c8','#c4956a','#8b6340','#f0d0a0','#ffffff'],
+    desc:'La tradition française par excellence. Choux à la crème, caramel, décorée de dragées et fleurs.',
+    details:'Garnitures : crème chantilly, pralinée, chocolat\nDécoration : fleurs fraîches, dragées, caramel filé\nAlternatives : macarons, éclairs, profiteroles\nTaille : 50 à 300 choux selon nb invités'},
+  { id:'g4', cat:'gateau', title:'Gâteau Drip Cake', emoji:'🍫', grad:'linear-gradient(135deg,#2c1a0e,#c9748f)',
+    colors:['#2c1a0e','#c9748f','#f5e6c8','#8b4513','#ffd700'],
+    desc:'Tendance moderne avec coulées de chocolat ou caramel. Très photogénique et gourmand.',
+    details:'Coulées : chocolat blanc coloré, caramel, ganache\nDéco top : macarons, fruits, chocolats, fleurs\nSaveurs : chocolat intense, red velvet, carrot cake\nFinition : lisse, texturé, ombré'},
+];
+
+let decoFilter = 'all';
+let favoris = JSON.parse(localStorage.getItem('mariage_favoris') || '[]');
+let currentDecoId = null;
+
+function filterDeco(f, btn) {
+  decoFilter = f;
+  document.querySelectorAll('#deco-filters .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDeco();
+}
+
+function renderDeco() {
+  const grid = document.getElementById('deco-grid');
+  const items = decoFilter === 'all' ? DECO_ITEMS : DECO_ITEMS.filter(i => i.cat === decoFilter);
+  grid.innerHTML = items.map(item => {
+    const isFav = favoris.includes(item.id);
+    return `<div class="card" style="padding:0;overflow:hidden;cursor:pointer;" onclick="openDecoModal('${item.id}')">
+      <div style="height:140px;background:${item.grad};display:flex;align-items:center;justify-content:center;position:relative;">
+        <span style="font-size:3.5rem;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">${item.emoji}</span>
+        <button onclick="event.stopPropagation();toggleFavori('${item.id}')" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.85);border:none;border-radius:50%;width:32px;height:32px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Favori">${isFav ? '❤️' : '🤍'}</button>
+        <div style="position:absolute;bottom:10px;left:12px;display:flex;gap:5px;">
+          ${item.colors.map(c => `<div style="width:18px;height:18px;border-radius:50%;background:${c};border:2px solid rgba(255,255,255,0.7);"></div>`).join('')}
+        </div>
+      </div>
+      <div style="padding:14px;">
+        <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;">${item.title}</div>
+        <div style="font-size:0.82rem;color:var(--text-light);line-height:1.4;">${item.desc}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openDecoModal(id) {
+  const item = DECO_ITEMS.find(i => i.id === id);
+  if (!item) return;
+  currentDecoId = id;
+  const isFav = favoris.includes(id);
+  document.getElementById('deco-modal-content').innerHTML = `
+    <div style="height:160px;background:${item.grad};border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+      <span style="font-size:5rem;">${item.emoji}</span>
+    </div>
+    <h3 style="margin-bottom:8px;">${item.title}</h3>
+    <p style="font-size:0.88rem;color:var(--text-light);margin-bottom:14px;">${item.desc}</p>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      ${item.colors.map(c => `<div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:36px;height:36px;border-radius:50%;background:${c};border:2px solid var(--border);box-shadow:var(--shadow);"></div><span style="font-size:0.65rem;color:var(--text-light);">${c}</span></div>`).join('')}
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:12px;font-size:0.83rem;white-space:pre-line;line-height:1.6;">${item.details}</div>`;
+  const favBtn = document.getElementById('deco-fav-btn');
+  favBtn.textContent = isFav ? '💔 Retirer des favoris' : '❤️ Ajouter aux favoris';
+  favBtn.style.background = isFav ? 'var(--text-light)' : 'var(--rose)';
+  document.getElementById('deco-modal').classList.add('open');
+}
+
+function toggleFavoriFromModal() {
+  if (currentDecoId) toggleFavori(currentDecoId, true);
+}
+
+function toggleFavori(id, fromModal) {
+  const idx = favoris.indexOf(id);
+  if (idx >= 0) favoris.splice(idx, 1);
+  else favoris.push(id);
+  localStorage.setItem('mariage_favoris', JSON.stringify(favoris));
+  renderDeco();
+  renderFavoris();
+  if (fromModal) openDecoModal(id);
+}
+
+function clearFavoris() {
+  favoris = [];
+  localStorage.setItem('mariage_favoris', JSON.stringify(favoris));
+  renderDeco();
+  renderFavoris();
+}
+
+function renderFavoris() {
+  const card = document.getElementById('favoris-card');
+  const list = document.getElementById('favoris-list');
+  const favItems = DECO_ITEMS.filter(i => favoris.includes(i.id));
+  if (favItems.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = favItems.map(item => `
+    <div onclick="openDecoModal('${item.id}')" style="cursor:pointer;background:${item.grad};border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:160px;">
+      <span style="font-size:1.6rem;">${item.emoji}</span>
+      <div>
+        <div style="font-size:0.82rem;font-weight:700;color:white;text-shadow:0 1px 3px rgba(0,0,0,0.3);">${item.title}</div>
+        <div style="display:flex;gap:4px;margin-top:4px;">${item.colors.slice(0,4).map(c=>`<div style="width:12px;height:12px;border-radius:50%;background:${c};border:1px solid rgba(255,255,255,0.6);"></div>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+
   navigator.serviceWorker.register(URL.createObjectURL(blob), {scope: './'}).catch(()=>{});
 }
 </script>
