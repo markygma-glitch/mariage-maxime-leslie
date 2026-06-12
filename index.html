@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mariage Maxime & Leslie</title>
+<meta name="description" content="Organisation du mariage de Maxime & Leslie">
+<meta name="theme-color" content="#c9748f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mariage 💍">
+<link rel="manifest" id="manifest-link">
+<link rel="apple-touch-icon" id="apple-icon">
+<script>
+// Génère l'icône et le manifest dynamiquement
+(function() {
+  // Canvas icon 512x512
+  const c = document.createElement('canvas');
+  c.width = 512; c.height = 512;
+  const ctx = c.getContext('2d');
+  const g = ctx.createLinearGradient(0,0,512,512);
+  g.addColorStop(0,'#e8a0b4'); g.addColorStop(1,'#b85c7a');
+  ctx.fillStyle = g;
+  ctx.beginPath();
+  ctx.roundRect(0,0,512,512,80);
+  ctx.fill();
+  ctx.font = '280px serif';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('💍',256,256);
+  const icon = c.toDataURL('image/png');
+  document.getElementById('apple-icon').href = icon;
+
+  const manifest = {
+    name: 'Mariage Maxime & Leslie',
+    short_name: 'Mariage 💍',
+    description: 'Organisation du mariage',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#faf7f8',
+    theme_color: '#c9748f',
+    orientation: 'portrait-primary',
+    icons: [
+      { src: icon, sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+      { src: icon, sizes: '192x192', type: 'image/png' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+  document.getElementById('manifest-link').href = URL.createObjectURL(blob);
+})();
+</script>
+<style>
+  :root {
+    --rose: #e8a0b4;
+    --rose-dark: #c9748f;
+    --rose-light: #fdf0f4;
+    --gold: #c9a84c;
+    --gold-light: #fdf7e8;
+    --green: #6aab8e;
+    --green-light: #edf7f2;
+    --blue: #7097c0;
+    --blue-light: #edf3fa;
+    --red: #e07070;
+    --text: #3a2e35;
+    --text-light: #8a7882;
+    --bg: #faf7f8;
+    --card: #ffffff;
+    --border: #eddde5;
+    --shadow: 0 2px 12px rgba(200,100,130,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #e8a0b4 0%, #c9748f 50%, #b85c7a 100%);
+    color: white; text-align: center; padding: 32px 16px 24px;
+    position: relative; overflow: hidden;
+  }
+  header::before {
+    content: ''; position: absolute; top: -40px; left: -40px;
+    width: 200px; height: 200px; background: rgba(255,255,255,0.06); border-radius: 50%;
+  }
+  header::after {
+    content: ''; position: absolute; bottom: -60px; right: -30px;
+    width: 250px; height: 250px; background: rgba(255,255,255,0.06); border-radius: 50%;
+  }
+  header h1 { font-size: 2rem; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
+  header p { opacity: 0.85; margin-top: 6px; font-size: 0.95rem; }
+  .date-badge {
+    display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 20px; padding: 4px 16px; margin-top: 10px; font-size: 0.9rem; cursor: pointer;
+  }
+  .date-badge:hover { background: rgba(255,255,255,0.3); }
+
+  /* NAV */
+  nav {
+    display: flex; gap: 4px; background: white; padding: 8px 12px;
+    border-bottom: 1px solid var(--border); overflow-x: auto; position: sticky; top: 0; z-index: 100;
+    box-shadow: var(--shadow);
+  }
+  nav button {
+    flex-shrink: 0; padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer;
+    font-size: 0.85rem; font-weight: 500; background: transparent; color: var(--text-light);
+    transition: all 0.2s;
+  }
+  nav button.active { background: var(--rose); color: white; }
+  nav button:hover:not(.active) { background: var(--rose-light); color: var(--rose-dark); }
+
+  /* MAIN */
+  main { max-width: 960px; margin: 0 auto; padding: 20px 12px 60px; }
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border-radius: 16px; padding: 20px;
+    box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+  }
+  .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px;
+    font-size: 0.78rem; font-weight: 600;
+  }
+  .badge-rose { background: var(--rose-light); color: var(--rose-dark); }
+  .badge-gold { background: var(--gold-light); color: #a07020; }
+  .badge-green { background: var(--green-light); color: #3d8060; }
+  .badge-blue { background: var(--blue-light); color: #3d6090; }
+  .badge-red { background: #fdf0f0; color: #c04040; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat-card {
+    background: var(--card); border-radius: 14px; padding: 16px; text-align: center;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .stat-value { font-size: 1.8rem; font-weight: 700; }
+  .stat-label { font-size: 0.78rem; color: var(--text-light); margin-top: 2px; }
+
+  /* FORMS */
+  .form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  input[type=text], input[type=number], input[type=email], input[type=date], select, textarea {
+    border: 1.5px solid var(--border); border-radius: 10px; padding: 9px 13px;
+    font-size: 0.9rem; color: var(--text); background: white; outline: none;
+    transition: border-color 0.2s; font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--rose); }
+  input[type=text], input[type=number], input[type=email], input[type=date] { flex: 1; min-width: 120px; }
+  select { flex: 1; min-width: 120px; cursor: pointer; }
+  textarea { width: 100%; min-height: 70px; resize: vertical; }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 18px; border: none; border-radius: 10px; cursor: pointer;
+    font-size: 0.88rem; font-weight: 600; transition: all 0.2s; font-family: inherit;
+  }
+  .btn-primary { background: var(--rose); color: white; }
+  .btn-primary:hover { background: var(--rose-dark); }
+  .btn-gold { background: var(--gold); color: white; }
+  .btn-gold:hover { background: #a87030; }
+  .btn-green { background: var(--green); color: white; }
+  .btn-green:hover { background: #4a8a6e; }
+  .btn-blue { background: var(--blue); color: white; }
+  .btn-blue:hover { background: #4a76a0; }
+  .btn-danger { background: transparent; color: var(--red); border: 1.5px solid var(--red); padding: 5px 10px; font-size: 0.8rem; border-radius: 8px; }
+  .btn-danger:hover { background: var(--red); color: white; }
+  .btn-sm { padding: 5px 12px; font-size: 0.8rem; }
+  .btn-icon { padding: 6px 10px; border-radius: 8px; font-size: 0.85rem; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th { background: var(--rose-light); color: var(--rose-dark); font-weight: 600; padding: 10px 12px; text-align: left; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--rose-light); }
+
+  /* TODO */
+  .todo-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .todo-item:last-child { border-bottom: none; }
+  .todo-check { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--rose); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .todo-check.done { background: var(--green); border-color: var(--green); color: white; }
+  .todo-text { flex: 1; font-size: 0.9rem; }
+  .todo-text.done { text-decoration: line-through; color: var(--text-light); }
+  .todo-meta { font-size: 0.78rem; color: var(--text-light); }
+  .todo-cat { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+
+  /* PROGRESS */
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+  .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+  /* BUDGET */
+  .budget-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
+  .budget-stat { text-align: center; padding: 14px; background: var(--bg); border-radius: 12px; }
+  .budget-stat .val { font-size: 1.4rem; font-weight: 700; }
+  .budget-stat .lbl { font-size: 0.75rem; color: var(--text-light); }
+
+  /* HEBERGEMENT */
+  .hotel-card {
+    border: 1.5px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px;
+  }
+  .hotel-card.full { border-color: var(--red); background: #fdf8f8; }
+  .hotel-card.available { border-color: var(--green); background: var(--green-light); }
+  .hotel-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .hotel-name { font-weight: 600; font-size: 0.95rem; }
+  .hotel-info { font-size: 0.82rem; color: var(--text-light); margin-top: 4px; }
+  .rooms-grid { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .room-chip {
+    padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; cursor: pointer;
+  }
+  .room-free { background: var(--green-light); color: #3d8060; border: 1px solid var(--green); }
+  .room-taken { background: #fdf0f0; color: #c04040; border: 1px solid var(--red); }
+
+  /* TABS CONTENT */
+  .section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+
+  /* COUNTDOWN */
+  .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+  .count-unit { text-align: center; background: white; border-radius: 12px; padding: 12px 16px; min-width: 70px; border: 1px solid var(--border); }
+  .count-num { font-size: 2rem; font-weight: 700; color: var(--rose-dark); line-height: 1; }
+  .count-lbl { font-size: 0.72rem; color: var(--text-light); margin-top: 2px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200;
+    align-items: center; justify-content: center; padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal { background: white; border-radius: 20px; padding: 24px; max-width: 440px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .modal h3 { margin-bottom: 16px; font-size: 1.1rem; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+  /* FILTERS */
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .filter-btn { padding: 5px 12px; border-radius: 16px; border: 1.5px solid var(--border); background: white; cursor: pointer; font-size: 0.82rem; color: var(--text-light); transition: all 0.2s; }
+  .filter-btn.active { background: var(--rose); color: white; border-color: var(--rose); }
+
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 40px 20px; color: var(--text-light); }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 8px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .budget-summary { grid-template-columns: 1fr 1fr; }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    header h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>&#10084; Organisation du Mariage</h1>
+  <p id="couple-names">Mariés</p>
+  <div class="date-badge" onclick="openDateModal()">&#128197; <span id="header-date">Définir la date du mariage</span></div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('accueil', this)">&#127968; Accueil</button>
+  <button onclick="showTab('invites', this)">&#128101; Invités</button>
+  <button onclick="showTab('budget', this)">&#128176; Budget</button>
+  <button onclick="showTab('hebergement', this)">&#127968; Hébergement</button>
+  <button onclick="showTab('todo', this)">&#9989; To-Do</button>
+  <button onclick="showTab('planning', this)">&#128337; Planning</button>
+</nav>
+
+<main>
+
+<!-- ======= ACCUEIL ======= -->
+<div id="tab-accueil" class="tab active">
+  <div class="card" style="background:linear-gradient(135deg,#fdf0f4,#fdf7e8); border-color:var(--rose);">
+    <div id="couple-edit" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+      <input type="text" id="name1" placeholder="Prénom Marié·e 1" style="flex:1;min-width:130px;" oninput="updateCouple()">
+      <span style="font-size:1.2rem;">&#10084;</span>
+      <input type="text" id="name2" placeholder="Prénom Marié·e 2" style="flex:1;min-width:130px;" oninput="updateCouple()">
+    </div>
+    <div class="countdown" id="countdown-display">
+      <div class="count-unit"><div class="count-num" id="cd-days">—</div><div class="count-lbl">jours</div></div>
+      <div class="count-unit"><div class="count-num" id="cd-hours">—</div><div class="count-lbl">heures</div></div>
+      <div class="count-unit"><div class="count-num" id="cd-min">—</div><div class="count-lbl">minutes</div></div>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-invites" style="color:var(--rose-dark)">0</div>
+      <div class="stat-label">Invités confirmés</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-budget" style="color:var(--gold)">0 €</div>
+      <div class="stat-label">Budget dépensé</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-todo" style="color:var(--green)">0%</div>
+      <div class="stat-label">Tâches faites</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-hebergement" style="color:var(--blue)">0</div>
+      <div class="stat-label">Chambres dispo</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">&#9989; Tâches urgentes</span><a href="#" onclick="showTab('todo',document.querySelectorAll('nav button')[4])" style="font-size:0.82rem;color:var(--rose-dark);">Voir tout</a></div>
+    <div id="urgent-tasks"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">&#128101; Invités en attente</span></div>
+    <div id="pending-guests"></div>
+  </div>
+</div>
+
+<!-- ======= INVITÉS ======= -->
+<div id="tab-invites" class="tab">
+  <div class="section-title">&#128101; Gestion des invités</div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ajouter un invité</span></div>
+    <div class="form-row">
+      <input type="text" id="g-prenom" placeholder="Prénom">
+      <input type="text" id="g-nom" placeholder="Nom">
+    </div>
+    <div class="form-row">
+      <input type="email" id="g-email" placeholder="Email (optionnel)">
+      <input type="text" id="g-tel" placeholder="Téléphone (optionnel)">
+    </div>
+    <div class="form-row">
+      <select id="g-cote">
+        <option value="">Côté</option>
+        <option value="marie1">Côté Maxime</option>
+        <option value="marie2">Côté Leslie</option>
+        <option value="commun">Commun</option>
+      </select>
+      <select id="g-statut">
+        <option value="invité">Invité</option>
+        <option value="confirmé">Confirmé ✓</option>
+        <option value="décliné">Décliné ✗</option>
+        <option value="en attente">En attente</option>
+      </select>
+      <select id="g-repas">
+        <option value="normal">Menu normal</option>
+        <option value="végétarien">Végétarien</option>
+        <option value="vegan">Vegan</option>
+        <option value="sans gluten">Sans gluten</option>
+        <option value="halal">Halal</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input type="number" id="g-enfants" placeholder="Enfants (nb)" min="0" style="max-width:160px;">
+      <input type="text" id="g-table" placeholder="Table n°">
+      <input type="text" id="g-notes" placeholder="Notes...">
+    </div>
+    <button class="btn btn-primary" onclick="addGuest()">+ Ajouter l'invité</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Liste des invités <span class="badge badge-rose" id="guest-count">0</span></span>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterGuests('all',this)">Tous</button>
+      <button class="filter-btn" onclick="filterGuests('confirmé',this)">Confirmés</button>
+      <button class="filter-btn" onclick="filterGuests('en attente',this)">En attente</button>
+      <button class="filter-btn" onclick="filterGuests('invité',this)">Invités</button>
+      <button class="filter-btn" onclick="filterGuests('décliné',this)">Déclinés</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Nom</th><th>Côté</th><th>Statut</th><th>Repas</th><th>Table</th><th>Enf.</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="guest-table"></tbody>
+      </table>
+    </div>
+    <div id="guest-empty" class="empty" style="display:none;"><div class="empty-icon">&#128101;</div>Aucun invité pour l'instant</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">&#128202; Récap</span></div>
+    <div class="stats-grid" style="margin-bottom:0;">
+      <div class="stat-card"><div class="stat-value" id="g-total" style="color:var(--rose-dark)">0</div><div class="stat-label">Total invités</div></div>
+      <div class="stat-card"><div class="stat-value" id="g-confirmes" style="color:var(--green)">0</div><div class="stat-label">Confirmés</div></div>
+      <div class="stat-card"><div class="stat-value" id="g-attente" style="color:var(--gold)">0</div><div class="stat-label">En attente</div></div>
+      <div class="stat-card"><div class="stat-value" id="g-declines" style="color:var(--red)">0</div><div class="stat-label">Déclinés</div></div>
+      <div class="stat-card"><div class="stat-value" id="g-enfants-total" style="color:var(--blue)">0</div><div class="stat-label">Enfants</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= BUDGET ======= -->
+<div id="tab-budget" class="tab">
+  <div class="section-title">&#128176; Budget</div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Budget total</span></div>
+    <div class="form-row">
+      <input type="number" id="budget-total" placeholder="Budget total (€)" oninput="saveBudgetTotal()">
+      <button class="btn btn-gold" onclick="saveBudgetTotal()">Enregistrer</button>
+    </div>
+    <div class="budget-summary">
+      <div class="budget-stat">
+        <div class="val" id="b-total" style="color:var(--gold)">0 €</div>
+        <div class="lbl">Budget total</div>
+      </div>
+      <div class="budget-stat">
+        <div class="val" id="b-spent" style="color:var(--rose-dark)">0 €</div>
+        <div class="lbl">Dépensé</div>
+      </div>
+      <div class="budget-stat">
+        <div class="val" id="b-reste" style="color:var(--green)">0 €</div>
+        <div class="lbl">Restant</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="b-progress" style="width:0%;background:var(--rose);"></div></div>
+    <div style="font-size:0.78rem;color:var(--text-light);margin-top:6px;" id="b-percent">0% du budget utilisé</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ajouter une dépense</span></div>
+    <div class="form-row">
+      <input type="text" id="b-desc" placeholder="Description">
+      <select id="b-cat">
+        <option value="Lieu">Lieu / Salle</option>
+        <option value="Traiteur">Traiteur / Repas</option>
+        <option value="Fleurs">Fleurs / Déco</option>
+        <option value="Musique">Musique / DJ</option>
+        <option value="Photo">Photo / Vidéo</option>
+        <option value="Robe">Tenues</option>
+        <option value="Invitations">Invitations</option>
+        <option value="Transport">Transport</option>
+        <option value="Hébergement">Hébergement</option>
+        <option value="Lune de miel">Lune de miel</option>
+        <option value="Autre">Autre</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input type="number" id="b-prevu" placeholder="Montant prévu (€)">
+      <input type="number" id="b-reel" placeholder="Montant réel (€)">
+      <select id="b-payé">
+        <option value="non">Non payé</option>
+        <option value="acompte">Acompte versé</option>
+        <option value="oui">Payé ✓</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input type="text" id="b-fournisseur" placeholder="Fournisseur / Prestataire">
+      <input type="text" id="b-notes" placeholder="Notes">
+    </div>
+    <button class="btn btn-gold" onclick="addBudgetItem()">+ Ajouter la dépense</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Dépenses <span class="badge badge-gold" id="b-count">0</span></span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Catégorie</th><th>Description</th><th>Prévu</th><th>Réel</th><th>Statut</th><th>Fournisseur</th><th></th></tr></thead>
+        <tbody id="budget-table"></tbody>
+      </table>
+    </div>
+    <div id="budget-empty" class="empty" style="display:none;"><div class="empty-icon">&#128176;</div>Aucune dépense enregistrée</div>
+  </div>
+</div>
+
+<!-- ======= HÉBERGEMENT ======= -->
+<div id="tab-hebergement" class="tab">
+  <div class="section-title">&#127968; Hébergement des invités</div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ajouter un hébergement</span></div>
+    <div class="form-row">
+      <input type="text" id="h-nom" placeholder="Nom (hôtel, gîte, chez l'habitant...)">
+      <input type="text" id="h-adresse" placeholder="Adresse / Lieu">
+    </div>
+    <div class="form-row">
+      <input type="number" id="h-chambres" placeholder="Nb chambres total" min="1">
+      <input type="number" id="h-prix" placeholder="Prix / nuit (€)">
+      <input type="text" id="h-contact" placeholder="Contact / Tel">
+    </div>
+    <div class="form-row">
+      <input type="text" id="h-notes" placeholder="Notes (navette dispo, petit-déj inclus...)">
+    </div>
+    <button class="btn btn-blue" onclick="addHotel()">+ Ajouter</button>
+  </div>
+
+  <div id="hotels-list">
+    <div class="empty"><div class="empty-icon">&#127968;</div>Aucun hébergement ajouté</div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="card-header"><span class="card-title">&#128101; Attribution des chambres</span></div>
+    <div class="form-row">
+      <select id="h-guest-select" style="flex:2;"></select>
+      <select id="h-hotel-select" style="flex:2;"></select>
+      <input type="text" id="h-room-num" placeholder="Chambre n°" style="max-width:120px;">
+      <button class="btn btn-blue btn-sm" onclick="assignRoom()">Attribuer</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Invité</th><th>Hébergement</th><th>Chambre</th><th></th></tr></thead>
+        <tbody id="room-assignments"></tbody>
+      </table>
+    </div>
+    <div id="room-empty" class="empty" style="display:none;"><div class="empty-icon">&#128101;</div>Aucune attribution</div>
+  </div>
+</div>
+
+<!-- ======= TO-DO ======= -->
+<div id="tab-todo" class="tab">
+  <div class="section-title">&#9989; To-Do List</div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Progression</span>
+      <span id="todo-stats" class="badge badge-green">0 / 0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="todo-progress" style="width:0%;background:var(--green);"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ajouter une tâche</span></div>
+    <div class="form-row">
+      <input type="text" id="t-text" placeholder="Tâche à faire..." onkeydown="if(event.key==='Enter')addTodo()">
+      <select id="t-cat">
+        <option value="Administratif">Administratif</option>
+        <option value="Lieu">Lieu / Salle</option>
+        <option value="Traiteur">Traiteur</option>
+        <option value="Fleurs">Fleurs / Déco</option>
+        <option value="Musique">Musique</option>
+        <option value="Photo">Photo / Vidéo</option>
+        <option value="Tenues">Tenues</option>
+        <option value="Invitations">Invitations</option>
+        <option value="Hébergement">Hébergement</option>
+        <option value="Autre">Autre</option>
+      </select>
+      <select id="t-priority">
+        <option value="normale">Normale</option>
+        <option value="urgente">&#128308; Urgente</option>
+        <option value="basse">Basse</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input type="date" id="t-date" placeholder="Échéance">
+      <input type="text" id="t-notes" placeholder="Notes...">
+      <button class="btn btn-green" onclick="addTodo()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterTodos('all',this)">Toutes</button>
+      <button class="filter-btn" onclick="filterTodos('todo',this)">À faire</button>
+      <button class="filter-btn" onclick="filterTodos('done',this)">Faites</button>
+      <button class="filter-btn" onclick="filterTodos('urgente',this)">Urgentes</button>
+    </div>
+    <div id="todo-list"></div>
+    <div id="todo-empty" class="empty" style="display:none;"><div class="empty-icon">&#9989;</div>Aucune tâche</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">&#128161; Tâches suggérées</span></div>
+    <p style="font-size:0.82rem;color:var(--text-light);margin-bottom:10px;">Cliquez pour ajouter à votre liste</p>
+    <div id="suggested-tasks" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+  </div>
+</div>
+
+<!-- ======= PLANNING ======= -->
+<div id="tab-planning" class="tab">
+  <div class="section-title">&#128337; Planning du Jour J</div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">Ajouter un moment</span></div>
+    <div class="form-row">
+      <input type="text" id="p-heure" placeholder="Heure (ex: 14:30)" style="max-width:120px;">
+      <input type="text" id="p-event" placeholder="Événement">
+      <input type="text" id="p-lieu" placeholder="Lieu">
+      <input type="text" id="p-resp" placeholder="Responsable">
+    </div>
+    <div class="form-row">
+      <input type="text" id="p-notes" placeholder="Notes">
+      <button class="btn btn-rose btn-primary" onclick="addPlanning()">+ Ajouter</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="planning-list"></div>
+    <div id="planning-empty" class="empty" style="display:none;"><div class="empty-icon">&#128337;</div>Ajoutez les moments de votre journée</div>
+  </div>
+</div>
+
+</main>
+
+<!-- MODAL date -->
+<div class="modal-overlay" id="date-modal">
+  <div class="modal">
+    <h3>&#128197; Date du mariage</h3>
+    <div class="form-row" style="flex-direction:column;">
+      <label style="font-size:0.85rem;color:var(--text-light);margin-bottom:4px;">Date</label>
+      <input type="date" id="wedding-date-input" style="width:100%;">
+      <label style="font-size:0.85rem;color:var(--text-light);margin:10px 0 4px;">Lieu de la cérémonie</label>
+      <input type="text" id="wedding-lieu" placeholder="Salle, château, mairie...">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()" style="background:var(--bg);">Annuler</button>
+      <button class="btn btn-primary" onclick="saveWeddingDate()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== STATE =====
+let state = {
+  couple: { name1: 'Maxime Wolff', name2: 'Leslie Vo', date: '', lieu: '' },
+  guests: [],
+  budget: { total: 0, items: [] },
+  hotels: [],
+  roomAssignments: [],
+  todos: [],
+  planning: []
+};
+
+const SUGGESTED = [
+  // Administratif
+  {text:'Publier les bans à la mairie', cat:'Administratif', priority:'urgente'},
+  {text:'Constituer le dossier de mariage civil', cat:'Administratif', priority:'urgente'},
+  {text:'Choisir les témoins', cat:'Administratif', priority:'urgente'},
+  {text:'Confirmer tous les prestataires (J-1 mois)', cat:'Administratif', priority:'urgente'},
+  {text:'Souscrire une assurance mariage', cat:'Administratif', priority:'normale'},
+  {text:'Changer de nom sur les documents officiels', cat:'Administratif', priority:'basse'},
+  {text:'Préparer les vœux', cat:'Administratif', priority:'normale'},
+  {text:'Préparer les discours', cat:'Administratif', priority:'normale'},
+  // Lieu
+  {text:'Réserver la salle de réception', cat:'Lieu', priority:'urgente'},
+  {text:'Visiter les salles candidates', cat:'Lieu', priority:'urgente'},
+  {text:'Réserver le lieu de cérémonie laïque', cat:'Lieu', priority:'urgente'},
+  {text:'Vérifier l\'accessibilité PMR du lieu', cat:'Lieu', priority:'normale'},
+  {text:'Prévoir le plan de salle', cat:'Lieu', priority:'normale'},
+  {text:'Organiser la visite du lieu avec le traiteur', cat:'Lieu', priority:'normale'},
+  // Traiteur
+  {text:'Choisir le traiteur', cat:'Traiteur', priority:'urgente'},
+  {text:'Faire une dégustation traiteur', cat:'Traiteur', priority:'urgente'},
+  {text:'Finaliser les menus', cat:'Traiteur', priority:'normale'},
+  {text:'Commander le gâteau de mariage', cat:'Traiteur', priority:'normale'},
+  {text:'Prévoir les options végétariennes / allergies', cat:'Traiteur', priority:'normale'},
+  {text:'Commander la pièce montée / wedding cake', cat:'Traiteur', priority:'normale'},
+  {text:'Prévoir les boissons (vin, champagne…)', cat:'Traiteur', priority:'normale'},
+  {text:'Organiser le cocktail / vin d\'honneur', cat:'Traiteur', priority:'normale'},
+  // Invitations
+  {text:'Envoyer les save the date', cat:'Invitations', priority:'urgente'},
+  {text:'Envoyer les faire-part', cat:'Invitations', priority:'urgente'},
+  {text:'Créer le site web du mariage', cat:'Invitations', priority:'normale'},
+  {text:'Préparer le plan de table', cat:'Invitations', priority:'normale'},
+  {text:'Faire les marque-places', cat:'Invitations', priority:'normale'},
+  {text:'Préparer les cadeaux invités (dragées…)', cat:'Invitations', priority:'basse'},
+  {text:'Créer un livre d\'or', cat:'Invitations', priority:'basse'},
+  {text:'Prévoir une urne / liste de mariage', cat:'Invitations', priority:'normale'},
+  {text:'Envoyer les confirmations de présence (RSVP)', cat:'Invitations', priority:'normale'},
+  // Fleurs / Déco
+  {text:'Choisir les fleurs', cat:'Fleurs', priority:'normale'},
+  {text:'Rencontrer le fleuriste', cat:'Fleurs', priority:'normale'},
+  {text:'Prévoir la décoration de table', cat:'Fleurs', priority:'normale'},
+  {text:'Commander le bouquet de mariée', cat:'Fleurs', priority:'normale'},
+  {text:'Décoration de la voiture', cat:'Fleurs', priority:'basse'},
+  {text:'Prévoir les bougies / lumières', cat:'Fleurs', priority:'basse'},
+  // Photo / Vidéo
+  {text:'Réserver le photographe', cat:'Photo', priority:'urgente'},
+  {text:'Réserver le vidéaste', cat:'Photo', priority:'urgente'},
+  {text:'Préparer la liste de photos souhaitées', cat:'Photo', priority:'normale'},
+  {text:'Prévoir un photobooth', cat:'Photo', priority:'basse'},
+  {text:'Organiser une séance engagement / couple', cat:'Photo', priority:'basse'},
+  // Musique
+  {text:'Réserver le DJ / groupe', cat:'Musique', priority:'urgente'},
+  {text:'Choisir la musique de la cérémonie', cat:'Musique', priority:'normale'},
+  {text:'Choisir la chanson de la première danse', cat:'Musique', priority:'normale'},
+  {text:'Préparer la playlist cocktail', cat:'Musique', priority:'basse'},
+  {text:'Choisir la musique entrée des mariés', cat:'Musique', priority:'normale'},
+  // Tenues
+  {text:'Choisir la robe de mariée', cat:'Tenues', priority:'urgente'},
+  {text:'Réserver le costume du marié', cat:'Tenues', priority:'urgente'},
+  {text:'Choisir les alliances', cat:'Tenues', priority:'urgente'},
+  {text:'Prévoir les tenues des témoins', cat:'Tenues', priority:'normale'},
+  {text:'Essayages de la robe', cat:'Tenues', priority:'normale'},
+  {text:'Choisir les chaussures', cat:'Tenues', priority:'normale'},
+  {text:'Coiffure & maquillage — essai', cat:'Tenues', priority:'normale'},
+  {text:'Réserver coiffeur & maquilleur pour le Jour J', cat:'Tenues', priority:'urgente'},
+  {text:'Accessoires (voile, bijoux, jarretière…)', cat:'Tenues', priority:'basse'},
+  // Hébergement
+  {text:'Prévoir la navette pour les invités', cat:'Hébergement', priority:'basse'},
+  {text:'Réserver les chambres pour les proches', cat:'Hébergement', priority:'normale'},
+  {text:'Réserver la suite nuptiale', cat:'Hébergement', priority:'urgente'},
+  {text:'Envoyer les infos hébergement aux invités', cat:'Hébergement', priority:'normale'},
+  // Autre
+  {text:'Organiser l\'enterrement de vie de garçon', cat:'Autre', priority:'normale'},
+  {text:'Organiser l\'enterrement de vie de jeune fille', cat:'Autre', priority:'normale'},
+  {text:'Réserver le lieu pour la lune de miel', cat:'Autre', priority:'normale'},
+  {text:'Réserver les billets lune de miel', cat:'Autre', priority:'normale'},
+  {text:'Prévoir animation enfants', cat:'Autre', priority:'basse'},
+  {text:'Préparer le programme de la journée', cat:'Autre', priority:'normale'},
+  {text:'Faire un répétition de la cérémonie', cat:'Autre', priority:'basse'},
+  {text:'Préparer les discours des témoins', cat:'Autre', priority:'normale'},
+  {text:'Prévoir un plan B météo (tente, chauffage…)', cat:'Autre', priority:'basse'},
+  {text:'Récupérer les tenues la veille', cat:'Autre', priority:'urgente'},
+  {text:'Préparer un kit de survie Jour J (épingles, sparadrap…)', cat:'Autre', priority:'basse'},
+];
+
+const CAT_COLORS = {
+  'Administratif': '#7097c0', 'Lieu': '#c9748f', 'Traiteur': '#c9a84c',
+  'Fleurs': '#6aab8e', 'Musique': '#9b7bc9', 'Photo': '#e08a5a',
+  'Tenues': '#e07098', 'Invitations': '#5ab8c9', 'Hébergement': '#7097c0', 'Autre': '#aaa'
+};
+const STATUS_COLORS = {
+  'confirmé': '#6aab8e', 'décliné': '#e07070', 'en attente': '#c9a84c', 'invité': '#7097c0'
+};
+
+// ===== PERSISTENCE =====
+function save() { try { localStorage.setItem('mariage_data', JSON.stringify(state)); } catch(e) {} }
+function load() {
+  try {
+    const d = localStorage.getItem('mariage_data');
+    if (d) { state = {...state, ...JSON.parse(d)}; }
+  } catch(e) {}
+}
+
+// ===== TAB =====
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else {
+    const btns = document.querySelectorAll('nav button');
+    const tabs = ['accueil','invites','budget','hebergement','todo','planning'];
+    const idx = tabs.indexOf(name);
+    if (idx >= 0) btns[idx].classList.add('active');
+  }
+}
+
+// ===== DATE =====
+function openDateModal() {
+  document.getElementById('wedding-date-input').value = state.couple.date || '';
+  document.getElementById('wedding-lieu').value = state.couple.lieu || '';
+  document.getElementById('date-modal').classList.add('open');
+}
+function closeModal() { document.getElementById('date-modal').classList.remove('open'); }
+function saveWeddingDate() {
+  state.couple.date = document.getElementById('wedding-date-input').value;
+  state.couple.lieu = document.getElementById('wedding-lieu').value;
+  save(); closeModal(); renderAll();
+}
+function updateCouple() {
+  state.couple.name1 = document.getElementById('name1').value;
+  state.couple.name2 = document.getElementById('name2').value;
+  save(); renderAll();
+}
+function renderCountdown() {
+  const el = document.getElementById('header-date');
+  if (!state.couple.date) { el.textContent = 'Définir la date du mariage'; updateCountdown(null); return; }
+  const d = new Date(state.couple.date);
+  el.textContent = d.toLocaleDateString('fr-FR', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  if (state.couple.lieu) el.textContent += ' — ' + state.couple.lieu;
+  updateCountdown(d);
+}
+function updateCountdown(date) {
+  if (!date) { ['cd-days','cd-hours','cd-min'].forEach(id => document.getElementById(id).textContent='—'); return; }
+  const now = new Date(); const diff = date - now;
+  if (diff < 0) { ['cd-days','cd-hours','cd-min'].forEach(id => document.getElementById(id).textContent='0'); return; }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  document.getElementById('cd-days').textContent = days;
+  document.getElementById('cd-hours').textContent = hours;
+  document.getElementById('cd-min').textContent = mins;
+}
+
+// ===== GUESTS =====
+function addGuest() {
+  const prenom = document.getElementById('g-prenom').value.trim();
+  const nom = document.getElementById('g-nom').value.trim();
+  if (!prenom && !nom) { alert('Entrez au moins un prénom ou un nom.'); return; }
+  state.guests.push({
+    id: Date.now(), prenom, nom,
+    email: document.getElementById('g-email').value.trim(),
+    tel: document.getElementById('g-tel').value.trim(),
+    cote: document.getElementById('g-cote').value,
+    statut: document.getElementById('g-statut').value,
+    repas: document.getElementById('g-repas').value,
+    enfants: parseInt(document.getElementById('g-enfants').value) || 0,
+    table: document.getElementById('g-table').value.trim(),
+    notes: document.getElementById('g-notes').value.trim()
+  });
+  ['g-prenom','g-nom','g-email','g-tel','g-enfants','g-table','g-notes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('g-statut').value='invité';
+  save(); renderAll();
+}
+function deleteGuest(id) {
+  state.guests = state.guests.filter(g => g.id !== id);
+  state.roomAssignments = state.roomAssignments.filter(r => r.guestId !== id);
+  save(); renderAll();
+}
+function updateGuestStatus(id, val) {
+  const g = state.guests.find(g => g.id === id); if (g) { g.statut = val; save(); renderAll(); }
+}
+let guestFilter = 'all';
+function filterGuests(f, btn) {
+  guestFilter = f;
+  document.querySelectorAll('#tab-invites .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGuests();
+}
+function renderGuests() {
+  const tbody = document.getElementById('guest-table');
+  const list = guestFilter === 'all' ? state.guests : state.guests.filter(g => g.statut === guestFilter);
+  tbody.innerHTML = '';
+  if (list.length === 0) { document.getElementById('guest-empty').style.display='block'; }
+  else { document.getElementById('guest-empty').style.display='none'; }
+  list.forEach(g => {
+    const sc = STATUS_COLORS[g.statut] || '#aaa';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${g.prenom} ${g.nom}</strong>${g.email ? '<br><small style="color:var(--text-light)">'+g.email+'</small>' : ''}</td>
+      <td>${
+        g.cote === 'marie1' ? '<span style="background:#f0e8fd;color:#7b4fc9;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; Maxime</span>' :
+        g.cote === 'marie2' ? '<span style="background:#fde8f0;color:#c9748f;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#128100; Leslie</span>' :
+        g.cote === 'commun' ? '<span style="background:var(--green-light);color:#3d8060;padding:2px 8px;border-radius:10px;font-size:0.78rem;font-weight:600;">&#10084; Commun</span>' : '—'
+      }</td>
+      <td>
+        <select style="border-color:${sc};color:${sc};font-size:0.8rem;padding:3px 6px;" onchange="updateGuestStatus(${g.id},this.value)">
+          ${['invité','confirmé','en attente','décliné'].map(s => `<option value="${s}" ${g.statut===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </td>
+      <td><small>${g.repas}</small></td>
+      <td>${g.table || '—'}</td>
+      <td>${g.enfants || '—'}</td>
+      <td><small style="color:var(--text-light)">${g.notes || '—'}</small></td>
+      <td><button class="btn-danger btn" onclick="deleteGuest(${g.id})">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('guest-count').textContent = state.guests.length;
+  document.getElementById('g-total').textContent = state.guests.length;
+  document.getElementById('g-confirmes').textContent = state.guests.filter(g=>g.statut==='confirmé').length;
+  document.getElementById('g-attente').textContent = state.guests.filter(g=>g.statut==='en attente'||g.statut==='invité').length;
+  document.getElementById('g-declines').textContent = state.guests.filter(g=>g.statut==='décliné').length;
+  document.getElementById('g-enfants-total').textContent = state.guests.reduce((a,g)=>a+g.enfants,0);
+}
+
+// ===== BUDGET =====
+function saveBudgetTotal() {
+  state.budget.total = parseFloat(document.getElementById('budget-total').value) || 0;
+  save(); renderBudget();
+}
+function addBudgetItem() {
+  const desc = document.getElementById('b-desc').value.trim();
+  if (!desc) { alert('Entrez une description.'); return; }
+  state.budget.items.push({
+    id: Date.now(),
+    desc, cat: document.getElementById('b-cat').value,
+    prevu: parseFloat(document.getElementById('b-prevu').value) || 0,
+    reel: parseFloat(document.getElementById('b-reel').value) || 0,
+    paye: document.getElementById('b-payé').value,
+    fournisseur: document.getElementById('b-fournisseur').value.trim(),
+    notes: document.getElementById('b-notes').value.trim()
+  });
+  ['b-desc','b-prevu','b-reel','b-fournisseur','b-notes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('b-payé').value='non';
+  save(); renderBudget();
+}
+function deleteBudgetItem(id) { state.budget.items = state.budget.items.filter(i => i.id !== id); save(); renderBudget(); }
+function renderBudget() {
+  const total = state.budget.total;
+  const spent = state.budget.items.reduce((a,i) => a + (i.reel || i.prevu), 0);
+  const reste = total - spent;
+  const pct = total > 0 ? Math.min(100, Math.round(spent/total*100)) : 0;
+  document.getElementById('b-total').textContent = fmt(total);
+  document.getElementById('b-spent').textContent = fmt(spent);
+  document.getElementById('b-reste').textContent = fmt(reste);
+  document.getElementById('b-progress').style.width = pct + '%';
+  document.getElementById('b-progress').style.background = pct > 90 ? 'var(--red)' : pct > 70 ? 'var(--gold)' : 'var(--rose)';
+  document.getElementById('b-percent').textContent = pct + '% du budget utilisé';
+  document.getElementById('budget-total').value = total || '';
+  const tbody = document.getElementById('budget-table');
+  tbody.innerHTML = '';
+  if (state.budget.items.length === 0) document.getElementById('budget-empty').style.display='block';
+  else document.getElementById('budget-empty').style.display='none';
+  state.budget.items.forEach(item => {
+    const tr = document.createElement('tr');
+    const payeColor = item.paye==='oui' ? 'var(--green)' : item.paye==='acompte' ? 'var(--gold)' : 'var(--text-light)';
+    tr.innerHTML = `
+      <td><span style="background:${CAT_COLORS[item.cat]||'#aaa'}22;color:${CAT_COLORS[item.cat]||'#aaa'};padding:2px 8px;border-radius:10px;font-size:0.78rem;">${item.cat}</span></td>
+      <td><strong>${item.desc}</strong>${item.notes?'<br><small style="color:var(--text-light)">'+item.notes+'</small>':''}</td>
+      <td>${fmt(item.prevu)}</td>
+      <td><strong>${fmt(item.reel)}</strong></td>
+      <td style="color:${payeColor};font-size:0.82rem;">${item.paye==='oui'?'✓ Payé':item.paye==='acompte'?'~ Acompte':'✗ Non payé'}</td>
+      <td><small>${item.fournisseur||'—'}</small></td>
+      <td><button class="btn-danger btn" onclick="deleteBudgetItem(${item.id})">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('b-count').textContent = state.budget.items.length;
+}
+function fmt(n) { return n.toLocaleString('fr-FR', {minimumFractionDigits:0, maximumFractionDigits:0}) + ' €'; }
+
+// ===== HOTELS =====
+function addHotel() {
+  const nom = document.getElementById('h-nom').value.trim();
+  if (!nom) { alert('Entrez un nom.'); return; }
+  state.hotels.push({
+    id: Date.now(),
+    nom, adresse: document.getElementById('h-adresse').value.trim(),
+    chambres: parseInt(document.getElementById('h-chambres').value) || 1,
+    prix: parseFloat(document.getElementById('h-prix').value) || 0,
+    contact: document.getElementById('h-contact').value.trim(),
+    notes: document.getElementById('h-notes').value.trim()
+  });
+  ['h-nom','h-adresse','h-chambres','h-prix','h-contact','h-notes'].forEach(id => document.getElementById(id).value='');
+  save(); renderHotels();
+}
+function deleteHotel(id) {
+  state.hotels = state.hotels.filter(h => h.id !== id);
+  state.roomAssignments = state.roomAssignments.filter(r => r.hotelId !== id);
+  save(); renderHotels();
+}
+function assignRoom() {
+  const guestId = parseInt(document.getElementById('h-guest-select').value);
+  const hotelId = parseInt(document.getElementById('h-hotel-select').value);
+  const room = document.getElementById('h-room-num').value.trim();
+  if (!guestId || !hotelId) { alert('Sélectionnez un invité et un hébergement.'); return; }
+  const existing = state.roomAssignments.findIndex(r => r.guestId === guestId);
+  if (existing >= 0) state.roomAssignments.splice(existing, 1);
+  state.roomAssignments.push({ guestId, hotelId, room });
+  document.getElementById('h-room-num').value = '';
+  save(); renderHotels();
+}
+function removeAssignment(guestId) {
+  state.roomAssignments = state.roomAssignments.filter(r => r.guestId !== guestId);
+  save(); renderHotels();
+}
+function renderHotels() {
+  const container = document.getElementById('hotels-list');
+  if (state.hotels.length === 0) { container.innerHTML = '<div class="empty"><div class="empty-icon">&#127968;</div>Aucun hébergement ajouté</div>'; }
+  else {
+    container.innerHTML = '';
+    state.hotels.forEach(h => {
+      const assigned = state.roomAssignments.filter(r => r.hotelId === h.id).length;
+      const free = h.chambres - assigned;
+      const div = document.createElement('div');
+      div.className = 'hotel-card ' + (free <= 0 ? 'full' : 'available');
+      div.innerHTML = `
+        <div class="hotel-header">
+          <div>
+            <div class="hotel-name">&#127968; ${h.nom}</div>
+            <div class="hotel-info">${h.adresse || ''} ${h.contact ? '· ' + h.contact : ''}</div>
+            ${h.prix ? '<div class="hotel-info">'+h.prix+' €/nuit</div>' : ''}
+            ${h.notes ? '<div class="hotel-info">'+h.notes+'</div>' : ''}
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:1.4rem;font-weight:700;color:${free>0?'var(--green)':'var(--red)'};">${free}</div>
+            <div style="font-size:0.72rem;color:var(--text-light);">libre / ${h.chambres}</div>
+            <button class="btn-danger btn" style="margin-top:6px;" onclick="deleteHotel(${h.id})">✕</button>
+          </div>
+        </div>`;
+      container.appendChild(div);
+    });
+  }
+  // selects
+  const gs = document.getElementById('h-guest-select');
+  const hs = document.getElementById('h-hotel-select');
+  gs.innerHTML = '<option value="">— Sélectionner un invité —</option>' +
+    state.guests.filter(g=>g.statut==='confirmé'||g.statut==='invité'||g.statut==='en attente').map(g=>`<option value="${g.id}">${g.prenom} ${g.nom}</option>`).join('');
+  hs.innerHTML = '<option value="">— Sélectionner un hébergement —</option>' +
+    state.hotels.map(h=>`<option value="${h.id}">${h.nom}</option>`).join('');
+  // assignments table
+  const tbody = document.getElementById('room-assignments');
+  tbody.innerHTML = '';
+  if (state.roomAssignments.length === 0) document.getElementById('room-empty').style.display='block';
+  else { document.getElementById('room-empty').style.display='none'; }
+  state.roomAssignments.forEach(r => {
+    const g = state.guests.find(g => g.id === r.guestId);
+    const h = state.hotels.find(h => h.id === r.hotelId);
+    if (!g || !h) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${g.prenom} ${g.nom}</td><td>${h.nom}</td><td>${r.room || '—'}</td><td><button class="btn-danger btn" onclick="removeAssignment(${r.guestId})">✕</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ===== TODO =====
+function addTodo() {
+  const text = document.getElementById('t-text').value.trim();
+  if (!text) return;
+  state.todos.push({
+    id: Date.now(), text,
+    cat: document.getElementById('t-cat').value,
+    priority: document.getElementById('t-priority').value,
+    date: document.getElementById('t-date').value,
+    notes: document.getElementById('t-notes').value.trim(),
+    done: false
+  });
+  document.getElementById('t-text').value = '';
+  document.getElementById('t-date').value = '';
+  document.getElementById('t-notes').value = '';
+  document.getElementById('t-priority').value = 'normale';
+  save(); renderTodos();
+}
+function toggleTodo(id) {
+  const t = state.todos.find(t => t.id === id); if (t) { t.done = !t.done; save(); renderTodos(); }
+}
+function deleteTodo(id) { state.todos = state.todos.filter(t => t.id !== id); save(); renderTodos(); }
+let todoFilter = 'all';
+function filterTodos(f, btn) {
+  todoFilter = f;
+  document.querySelectorAll('#tab-todo .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTodos();
+}
+function renderTodos() {
+  const list = document.getElementById('todo-list');
+  let items = [...state.todos];
+  if (todoFilter === 'todo') items = items.filter(t => !t.done);
+  else if (todoFilter === 'done') items = items.filter(t => t.done);
+  else if (todoFilter === 'urgente') items = items.filter(t => t.priority === 'urgente' && !t.done);
+  items.sort((a,b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const prio = {urgente:0, normale:1, basse:2};
+    return (prio[a.priority]||1) - (prio[b.priority]||1);
+  });
+  list.innerHTML = '';
+  if (items.length === 0) { document.getElementById('todo-empty').style.display='block'; }
+  else { document.getElementById('todo-empty').style.display='none'; }
+  items.forEach(t => {
+    const div = document.createElement('div');
+    div.className = 'todo-item';
+    const c = CAT_COLORS[t.cat] || '#aaa';
+    const dateStr = t.date ? new Date(t.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) : '';
+    div.innerHTML = `
+      <div class="todo-check ${t.done?'done':''}" onclick="toggleTodo(${t.id})">${t.done?'✓':''}</div>
+      <div style="flex:1;">
+        <div class="todo-text ${t.done?'done':''}" style="font-weight:${t.priority==='urgente'&&!t.done?'600':'400'};">
+          ${t.priority==='urgente'&&!t.done?'&#128308; ':''}${t.text}
+        </div>
+        ${t.notes?'<div style="font-size:0.78rem;color:var(--text-light);">'+t.notes+'</div>':''}
+      </div>
+      <span class="todo-cat" style="background:${c}22;color:${c}">${t.cat}</span>
+      ${dateStr?'<span class="todo-meta">'+dateStr+'</span>':''}
+      <button class="btn-danger btn" style="padding:3px 7px;font-size:0.75rem;" onclick="deleteTodo(${t.id})">✕</button>`;
+    list.appendChild(div);
+  });
+  const done = state.todos.filter(t => t.done).length;
+  const total = state.todos.length;
+  const pct = total > 0 ? Math.round(done/total*100) : 0;
+  document.getElementById('todo-stats').textContent = done + ' / ' + total;
+  document.getElementById('todo-progress').style.width = pct + '%';
+
+  // suggestions: show ones not already added
+  const existing = state.todos.map(t => t.text.toLowerCase());
+  const sugg = SUGGESTED.filter(s => !existing.includes(s.text.toLowerCase()));
+  const sc = document.getElementById('suggested-tasks');
+  sc.innerHTML = sugg.slice(0,12).map(s => {
+    const c = CAT_COLORS[s.cat] || '#aaa';
+    return `<button onclick="addSuggested(${JSON.stringify(s).replace(/"/g,'&quot;')})" style="padding:5px 12px;border-radius:20px;border:1.5px solid ${c};background:${c}15;color:${c};cursor:pointer;font-size:0.8rem;">+ ${s.text}</button>`;
+  }).join('');
+}
+function addSuggested(s) {
+  state.todos.push({ id: Date.now(), text: s.text, cat: s.cat, priority: s.priority, date: '', notes: '', done: false });
+  save(); renderTodos();
+}
+
+// ===== PLANNING =====
+function addPlanning() {
+  const event = document.getElementById('p-event').value.trim();
+  if (!event) return;
+  state.planning.push({
+    id: Date.now(),
+    heure: document.getElementById('p-heure').value.trim(),
+    event, lieu: document.getElementById('p-lieu').value.trim(),
+    resp: document.getElementById('p-resp').value.trim(),
+    notes: document.getElementById('p-notes').value.trim()
+  });
+  ['p-heure','p-event','p-lieu','p-resp','p-notes'].forEach(id => document.getElementById(id).value='');
+  state.planning.sort((a,b) => a.heure.localeCompare(b.heure));
+  save(); renderPlanning();
+}
+function deletePlanning(id) { state.planning = state.planning.filter(p => p.id !== id); save(); renderPlanning(); }
+function renderPlanning() {
+  const list = document.getElementById('planning-list');
+  if (state.planning.length === 0) { document.getElementById('planning-empty').style.display='block'; list.innerHTML=''; return; }
+  document.getElementById('planning-empty').style.display='none';
+  list.innerHTML = state.planning.map(p => `
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);">
+      <div style="min-width:56px;text-align:center;background:var(--rose-light);border-radius:8px;padding:6px;font-weight:700;color:var(--rose-dark);font-size:0.9rem;">${p.heure||'?'}</div>
+      <div style="flex:1;">
+        <div style="font-weight:600;">${p.event}</div>
+        <div style="font-size:0.8rem;color:var(--text-light);">${p.lieu?'📍 '+p.lieu:''} ${p.resp?'· 👤 '+p.resp:''}</div>
+        ${p.notes?'<div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;">'+p.notes+'</div>':''}
+      </div>
+      <button class="btn-danger btn" onclick="deletePlanning(${p.id})">✕</button>
+    </div>`).join('');
+}
+
+// ===== ACCUEIL =====
+function renderAccueil() {
+  const confirmed = state.guests.filter(g => g.statut === 'confirmé').length;
+  const spent = state.budget.items.reduce((a,i) => a + (i.reel || i.prevu), 0);
+  const done = state.todos.filter(t => t.done).length;
+  const total = state.todos.length;
+  const freeRooms = state.hotels.reduce((a,h) => {
+    const taken = state.roomAssignments.filter(r => r.hotelId === h.id).length;
+    return a + Math.max(0, h.chambres - taken);
+  }, 0);
+  document.getElementById('stat-invites').textContent = confirmed;
+  document.getElementById('stat-budget').textContent = fmt(spent);
+  document.getElementById('stat-todo').textContent = total > 0 ? Math.round(done/total*100) + '%' : '0%';
+  document.getElementById('stat-hebergement').textContent = freeRooms;
+  document.getElementById('couple-names').textContent =
+    (state.couple.name1 || '?') + ' & ' + (state.couple.name2 || '?');
+
+  // urgent tasks
+  const urgent = state.todos.filter(t => !t.done && t.priority === 'urgente').slice(0,5);
+  const utEl = document.getElementById('urgent-tasks');
+  if (urgent.length === 0) utEl.innerHTML = '<div class="empty" style="padding:20px;"><div class="empty-icon">&#127881;</div>Aucune tâche urgente !</div>';
+  else utEl.innerHTML = urgent.map(t => `<div class="todo-item"><div class="todo-check" onclick="toggleTodo(${t.id})"></div><div class="todo-text">&#128308; ${t.text}</div><span style="font-size:0.75rem;color:var(--text-light);">${t.cat}</span></div>`).join('');
+
+  // pending guests
+  const pending = state.guests.filter(g => g.statut === 'en attente' || g.statut === 'invité').slice(0,5);
+  const pgEl = document.getElementById('pending-guests');
+  if (pending.length === 0) pgEl.innerHTML = '<div class="empty" style="padding:20px;"><div class="empty-icon">&#127881;</div>Tous les invités ont répondu !</div>';
+  else pgEl.innerHTML = pending.map(g => `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);"><span>${g.prenom} ${g.nom}</span><select style="font-size:0.78rem;padding:3px 6px;border-radius:8px;border:1px solid var(--border);" onchange="updateGuestStatus(${g.id},this.value)"><option value="invité" ${g.statut==='invité'?'selected':''}>Invité</option><option value="confirmé">Confirmé ✓</option><option value="en attente" ${g.statut==='en attente'?'selected':''}>En attente</option><option value="décliné">Décliné</option></select></div>`).join('');
+}
+
+// ===== RENDER ALL =====
+function renderAll() {
+  renderCountdown();
+  document.getElementById('name1').value = state.couple.name1 || 'Maxime Wolff';
+  document.getElementById('name2').value = state.couple.name2 || 'Leslie Vo';
+  renderGuests();
+  renderBudget();
+  renderHotels();
+  renderTodos();
+  renderPlanning();
+  renderAccueil();
+}
+
+// ===== INIT =====
+load();
+renderAll();
+setInterval(() => { if (state.couple.date) updateCountdown(new Date(state.couple.date)); }, 60000);
+
+// ===== PWA SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  const swCode = `
+const CACHE = 'mariage-v1';
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', './index.html'])));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    const clone = res.clone();
+    caches.open(CACHE).then(c => c.put(e.request, clone));
+    return res;
+  }).catch(() => caches.match('./'))));
+});`;
+  const blob = new Blob([swCode], {type:'application/javascript'});
+  navigator.serviceWorker.register(URL.createObjectURL(blob), {scope: './'}).catch(()=>{});
+}
+</script>
+</body>
+</html>
